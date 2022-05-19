@@ -2,9 +2,14 @@
 #include<stdlib.h>
 #include<time.h>
 #include<string.h>
-
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 #define NbColonneGrille 10
 #define NbLigneGrille 14
+#define DureeDecompte 10
 
 
 
@@ -59,7 +64,8 @@ int trouverCentre(int piece16[]) {	//fonction permettant de trouver le centre d'
 
 
 
-void afficherLignePiece(int pieceReorientee[], int numLignePiece) {		//
+
+void afficherLignePiece(int pieceReorientee[], int numLignePiece) {		//affiche la ligne souhaitee d'une piece passée en paramètres
 	int numLignePieceEnCours = 0;
 	int ligneVide;
 	for (int ligne = 0; ligne < 4; ligne++) {
@@ -70,7 +76,7 @@ void afficherLignePiece(int pieceReorientee[], int numLignePiece) {		//
 
 			}
 		}
-		//if (ligneVide == 0) {
+		if (ligneVide == 0) {
 			numLignePieceEnCours++;
 			if (numLignePiece == numLignePieceEnCours) {
 				for (int colonne = 0; colonne < 4; colonne++) {
@@ -81,23 +87,25 @@ void afficherLignePiece(int pieceReorientee[], int numLignePiece) {		//
 						printf(" ");
 					}
 				}
+				return;
 			}
-		//}
+		}
 	}
+	printf("    ");
 }
 
 
 
 
-void rotation(int* piece8, int angle, int* pieceReorientee) {
+void rotation(int* piece8, int angle, int* pieceReorientee) {		//permet de retourner la piece souhaitee dans la direction indiquee
 	int piece16[16];
-	for (int rang = 0; rang < 8; rang++) {
+	for (int rang = 0; rang < 8; rang++) {		//conversion de la piece de format 8 en piece de format 16
 		piece16[rang] = piece8[rang];
 	}
 	for (int rang = 8; rang < 16; rang++) {
 		piece16[rang] = 0;
 	}
-	if (angle == 0) {
+	if (angle == 0) {				//applique la formule adaptée selon l'angle de rotation souhaité
 		for (int rang = 0; rang < 16; rang++) {
 			pieceReorientee[rang] = piece16[rang];
 		}
@@ -127,33 +135,87 @@ void rotation(int* piece8, int angle, int* pieceReorientee) {
 
 
 
-//fonction remlissage tableau
-	//prend la partie concernée du tableau final
-	//reporte chaque caractère du tableau intermédiaire dans le tableau final
+
+void remplissageGrille(int grille[],int piece16[],int colonneChoisie,int ligneChoisie){			//reporte la piece sur la grille à un emplacement donné en paramètres
+	for(int lignePiece = 0;lignePiece<4;lignePiece++){
+		for(int colonnePiece = 0;colonnePiece<4;colonnePiece++){
+			if(piece16[lignePiece*4+colonnePiece] == 1){					
+				grille[(lignePiece + ligneChoisie)*10 + (colonnePiece + colonneChoisie)] = 1;		//emplacement de la piece sur la grile
+			}
+			printf("étape3");
+		}
+		printf("étape2");
+	}
+	printf("étape1");
+}
 
 
 
 
-//fonction placement pièce
-	//parcourir le tableau final
-	//si la ligne est vide descend d'une ligne
-	//si il y a un caractère sur la ligne regarde s'il y a collision avec la pièce
-	//quand il y a collision avec la pièce revient à la ligne précédente
-	//appelle la fonction remplissage tableau
+int positionPiece(int grille[],int piece16[], int colonneChoisie){		// retourne la ligne où placer la piece passée en paramètres
+	int ligneFinale;
+	int ligneVide = 1;
+	int ligneAInspecter;
+
+	while(ligneVide == 1){					//cherche la première ligne non-vide et la stocke dans ligneAInspecter
+		for(int ligneGrille = 0;ligneGrille<14;ligneGrille++){
+			for(int colonneGrille = 0;colonneGrille<10;colonneGrille++){
+				if(grille[ligneGrille*10+colonneGrille] == 1){
+					ligneAInspecter = ligneGrille;
+					ligneVide = 0;
+				}
+			}
+			
+		}
+	}
+	int collision = 0;
+	
+	while(collision == 0){				// tant qu'aucune collision n'est détectée avec une autre pièce ou la fin de la grille on continue		
+		for(int ligneAInspecter;ligneAInspecter<14;ligneAInspecter++){				//on parcourt la grille en commençant à ligneAInspecter
+			for(int colonneGrille = 0;colonneGrille<10;colonneGrille++){
+				if(grille[(ligneAInspecter)*10+colonneGrille] == 1){			//si la case inspectée est remplie on la compare à la case correspondante de la pièce
+					for(int lignePiece = 0;lignePiece<4;lignePiece++){
+						for(int colonnePiece = 0;colonnePiece<4;colonnePiece++){
+							if(piece16[lignePiece*4+colonnePiece] == 1){
+								if((lignePiece + ligneAInspecter)*10 + (colonnePiece + colonneChoisie) == ligneAInspecter*10+colonneGrille){
+									ligneFinale = ligneAInspecter - 1;			//s'il y a collision on retourne la ligne précédente
+									collision == 1;
+								}
+							}
+						}
+					}
+				}
+			}
+			if(ligneAInspecter == 13){			//si on arrive à la dernière ligne de la grille on retourne cette dernière
+				ligneFinale = ligneAInspecter;
+				collision = 1;
+				
+			}
+		}
+	}	
+	return ligneFinale;	
+}
 
 
 
 
-//fonction décompte
+void decompte(){
+	int etape = 0;
+	do{
+		printf("%d\n",DureeDecompte-etape);
+		sleep(1);
+		etape++;
+	}while(DureeDecompte-etape>0);
 	//demarre à 10
 	//chaque seconde retire 1
+}
 
 
 
 
-void affichageGrille(int grille[]) {
+void affichageGrille(int grille[]) {				//affiche la grille de jeu
 	printf(" 1 2 3 4 5 6 7 8 9 10\n");
-	for (int ligne = 4; ligne < NbLigneGrille; ligne++) {
+	for (int ligne = 4; ligne < NbLigneGrille; ligne++) {			//parcourt le tableau à l'exception des 4 premières lignes
 		for (int colonne = 0; colonne < NbColonneGrille; colonne++) {
 			if (grille[ligne * NbColonneGrille + colonne] == 1) {
 				printf("|@");
@@ -166,75 +228,38 @@ void affichageGrille(int grille[]) {
 	}
 	printf("\n");
 }
-//parcourt le tableau final à l'exception des quatre premières lignes
-//place un "|" puis marque le caractère correspondant
-//à la fin de chaque ligne place un "|" supplémentaire
-
-/*void affichageOrientation1(int piece[], int indiceDepart) {
-	int* pieceReorientee = NULL;
-	pieceReorientee = calloc(16, sizeof(int));
-	rotation(&piece[indiceDepart], 90, pieceReorientee);
-	for (int ligne = 0; ligne < 4; ligne++) {
-		int videLigne = 1;
-		for (int rang = 0; rang < 4; rang++) {
-			if (pieceReorientee[ligne * 4 + rang] == 1) {
-				videLigne = 0;
-			}
-		}
-		if (videLigne == 0) {
-			for (int colonne = 0; colonne < 4; colonne++) {
-				int videColonne = 1;
-				for (int rang = 0; rang < 4; rang++) {
-					if (pieceReorientee[rang * 4 + colonne] == 1) {
-						videColonne = 0;
-					}
-				}
-				if(videColonne == 0){
-					if (pieceReorientee[ligne * 4 + colonne] == 1) {
-						printf("@");
-					}
-					else {
-						printf(" ");
-					}
-				}
-			}
-			printf("\n");
-		}
-	}
-	free(pieceReorientee);
-
-	//affiche les nombres correspondant aux choix
-	//appelle la fonction rotation
-	//affiche les pièces réorientées
-}*/
 
 
-void afficherPieceOrientee(int piece[], int indiceDepart) {
+
+
+void afficherPiecesOrientees(int piece[], int indiceDepart){ 				//affiche les différentes orientations possibles d'une piece passée en paramètres
 	int* pieceReorientee[4];
 	int centrePiece[4];
 	int espace[4];
 	for (int rang = 0; rang < 4; rang++) {
-		pieceReorientee[rang] = calloc(16, sizeof(int));
-		rotation(&piece[indiceDepart], rang*90, pieceReorientee[rang]);
+		pieceReorientee[rang] = calloc(16, sizeof(int));			//crée un tableau contenant les différentes orientations de la pièce
+		rotation(&piece[indiceDepart], rang*90, pieceReorientee[rang]);		//crée un second tableau contenant le centre de chaque orientation de la pièce
 		centrePiece[rang] = trouverCentre(pieceReorientee[rang]);
 		for (int i = 0; i < centrePiece[rang];i++) {
 			printf(" ");
 		}
-		printf("%d",rang+1);
-		for (int i = centrePiece[rang] + 1; i < 4 - centrePiece[rang] + 1; i++) {
+		printf("%d",rang+1);							//écrit les numéros de chaque orientation avec le nombre d'espace approprié
+		for (int i = centrePiece[rang] + 1; i < 4; i++) {
 			printf(" ");
 		}
 		printf(" ");
 	}
 	printf("\n");
-	for (int lignePiece = 1; lignePiece < 5; lignePiece++) {
+	for (int lignePiece = 1; lignePiece < 5; lignePiece++) {			//affiche ligne par ligne les orientations de la pièce
 		for (int piece = 0; piece < 4; piece++) {
 			afficherLignePiece(pieceReorientee[piece], lignePiece);
 			printf(" ");
 		}
 		printf("\n");
 	}
+	printf("\n");
 }
+
 
 
 
@@ -242,6 +267,14 @@ void afficherPieceOrientee(int piece[], int indiceDepart) {
 	//ouvre le fichier classement en mode écriture
 	//inscrit le score du joueur à la suite des autres
 	//ferme le fichier
+
+
+
+//fonction lecture score
+	//ouvre le fichier classement en mode lecture
+	//crée un tableau de joueurs avec leur score et leur pseudo
+	//retourne ce tableau
+	
 
 
 
@@ -259,7 +292,7 @@ void afficherPieceOrientee(int piece[], int indiceDepart) {
 
 //fonction affichage classement
 	//ouvre le fichier en mode lecture
-	//lis les scores des dix meilleurs joueurs
+	//les les scores des dix meilleurs joueurs
 	//appelle la fonction meilleurs scores
 	//affiche les 10 meilleurs scores
 	//ferme le fichier
@@ -267,7 +300,55 @@ void afficherPieceOrientee(int piece[], int indiceDepart) {
 
 
 
-//fonction tour
+void tour(int grille[],int piece[]){
+	int numPiece, orientationChoisie, colonneChoisie, ligneChoisie;
+	int pieceReorientee[16];
+	int orientationCorrecte = 0;
+	int colonneCorrecte = 0;
+
+	numPiece = 0 + (rand()%6)*8;		//choix aléatoire d'une pièce parmi les 7 possibles
+	affichageGrille(grille);
+	afficherPiecesOrientees(piece,numPiece);
+	//decompte();
+
+	do{
+		printf("Choisissez l'orientation de la pièce : ");
+		scanf("%d",&orientationChoisie);
+		printf("\n");
+		if(orientationChoisie >= 1 && orientationChoisie <= 4){
+			orientationCorrecte = 1;	
+		}
+		else{
+			printf("L'orientation choisie n'est pas valide veuillez recommencer.\n\n");
+		}
+	}while(orientationCorrecte == 0);
+
+    do{
+	    printf("Choisissez la colonne où placer la pièce : ");
+	    scanf("%d",&colonneChoisie);
+	    printf("\n");
+	    if(colonneChoisie >= 1 && colonneChoisie <= 10){
+			colonneCorrecte = 1;	
+		}
+		else{
+			printf("La colonne choisie n'est pas valide veuillez recommencer.\n\n");
+		}
+    }while(colonneCorrecte == 0);
+    
+	rotation(&piece[numPiece],orientationChoisie,pieceReorientee);
+	/*printf("rotation\n");
+	ligneChoisie = positionPiece(grille,pieceReorientee,colonneChoisie);
+	printf("position\n");
+	remplissageGrille(grille,pieceReorientee,colonneChoisie,ligneChoisie);
+	printf("remplissage\n");
+	affichageGrille(grille);*/
+}
+	
+	
+	
+		
+
+
 	//génération aléatoire d'une pièce
 	//appelle la fonction affichage tableau
 	//appelle la fonction affichage orientation
@@ -280,10 +361,10 @@ void afficherPieceOrientee(int piece[], int indiceDepart) {
 
 
 
-void main() {
+void main() {							//fonction principale
 	srand(time(NULL));
 
-	int piece[7 * 8];
+	int piece[7 * 8];						//crée et initialise les différentes pièces sous forme d'un tableau à une dimension
 	piece[0] = 1; piece[1] = 1; piece[2] = 1; piece[3] = 1;
 	piece[8] = 1; piece[9] = 1; piece[12] = 1; piece[13] = 1;
 	piece[16] = 1; piece[17] = 1; piece[18] = 1; piece[21] = 1;
@@ -300,23 +381,26 @@ void main() {
 
 	int grille[NbLigneGrille * NbColonneGrille] = { 0 };
 
-	printf("Bienvenue dans Tetris.\n");
+	printf("Bienvenue dans Tetris.\n\n\n");
 	char pseudo[10], testPseudo[10];
 	int pseudoCorrect = 0;
 	do {
-		printf("Veuillez choisir votre pseudo (max 10 caractères):\n");
+		printf("Choisissez votre pseudo (max 10 caractères): ");			//demande à l'utilisateur de choisir son pseudo et vérifie que celui-ci n'est pas trop long
 		scanf("%s", testPseudo);
+		printf("\n");
 		if (strlen(testPseudo) <= 10) {
 			strcpy(pseudo, testPseudo);
 			pseudoCorrect = 1;
-			printf("Votre pseudo est %s.\n", pseudo);
+			printf("Votre pseudo est %s.\n\n\n", pseudo);
 		}
 		else {
 			printf("Votre pseudo est trop long veuillez recommencer (max 10 caractères).\n");
 		}
 	} while (pseudoCorrect == 0);
-	affichageGrille(grille);
-	afficherPieceOrientee(piece, 16);
+	//affichageGrille(grille);
+	//afficherPieceOrientee(piece, 16);
+	//decompte();
+	tour(grille,piece);
 }
 //appelle la fonction tour tant que la partie n'est pas perdue
 //appelle la fonction affichage tableau
