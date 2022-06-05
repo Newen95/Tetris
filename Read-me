@@ -1,0 +1,14 @@
+Instructions de compilation :
+
+1) Ouvrez l'invite de commande
+2) Déplacez-vous dans le répertoire Tetris
+3) Exécutez la commande "make" pour générer l'éxécutable
+4) Exécutez la commande "make clean" pour supprimer les fichiers objet
+5) Exécuter la commande "./tetris.exe" pour lancer Tetris
+
+
+Comment jouer à Tetris :
+
+1) Chaque tour choisissez la numéro de l'orientation de la pièce souhaité
+2) Puis choisissez le numéro de la colonne où placer la pièce
+3) Pour chaque question vous disposez de cinq secondes pour répondre
