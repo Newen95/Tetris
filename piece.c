@@ -219,7 +219,7 @@ int trouverCentre( int piece16[] ) {
 		int nbColonne[ 2 ] = { 0,0 };			//si la largeur est de 2, place le centre au dessus de la colonne la plus remplie
 		for( int ligne = 0; ligne < 4; ligne++ ) {
 			for( int colonne = bordGauche; colonne < bordGauche + 2; colonne++ ) {
-				if( piece16[ ligne * 4 + colonne ] == 1 ) {
+				if( piece16[ ligne * 4 + colonne ] != Aucune) {
 					if( colonne == bordGauche ) {
 						nbColonne[ 0 ]++;
 					}
