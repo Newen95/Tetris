@@ -9,7 +9,7 @@ Le jeu prend place sur une grille de jeu de 10 lignes et de 10 colonnes.
 Les pièces sont choisies au hasard.
 A la fin de la partie, le classement des 10 meilleurs joueurs est affiché.
 
-### Voici comment jouer à Tetris:
+### Voici comment jouer à Tetris:
 * Choisissez votre niveau de difficulté (temps pour jouer)
 * Choisissez votre pseudo
 * Chaque tour choisissez la numéro de l'orientation de la pièce souhaité
