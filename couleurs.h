@@ -12,18 +12,18 @@
 #define Rouge 31
 #define Vert 32
 
-// Efface l'écran et replace le curseur en haut à gauche
+// Efface l'Ã©cran et replace le curseur en haut Ã  gauche
 #define clrscr() printf("\033[H\033[2J")
 
-// Sélection de couleurs
+// SÃ©lection de couleurs
 #define couleur(param) printf("\033[%sm",param)
-/*   param devant être un const char *, vide (identique à "0") ou formé
-     d'une où plusieurs valeurs séparées par des ; parmi
-         0  réinitialisation         1  haute intensité (des caractères)
-         5  clignotement             7  video inversé
-         30, 31, 32, 33, 34, 35, 36, 37 couleur des caractères
+/*   param devant Ãªtre un const char *, vide (identique Ã  "0") ou formÃ©
+     d'une ou plusieurs valeurs sÃ©parÃ©es par des ; parmi
+         0  rÃ©initialisation         1  haute intensitÃ© (des caractÃ¨res)
+         5  clignotement             7  vidÃ©o inversÃ©e
+         30, 31, 32, 33, 34, 35, 36, 37 couleur des caractÃ¨res
          40, 41, 42, 43, 44, 45, 46, 47 couleur du fond
-            les couleurs, suivant la logique RGB, étant respectivement
+            les couleurs, suivant la logique RGB, Ã©tant respectivement
                noir, rouge, vert, jaune, bleu, magenta, cyan et blanc */
 
 #endif

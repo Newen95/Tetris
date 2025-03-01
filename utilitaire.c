@@ -12,9 +12,9 @@
 #include "utilitaire.h"
 
 // decompte
-// utilité : permet de détecter si l'utilisateur a enfoncé une touche du clavier durant le décompte
-// paramètres d'entrée : durée du décompte en secondes
-// paramètres de sortie : 1 si l'utilisateur a appuyé sur une touche, 0 sinon
+// utilitÃ© : permet de dÃ©tecter si l'utilisateur a enfoncÃ© une touche du clavier durant le dÃ©compte
+// paramÃ¨tres d'entrÃ©e : durÃ©e du dÃ©compte en secondes
+// paramÃ¨tres de sortie : 1 si l'utilisateur a appuyÃ© sur une touche, 0 sinon
 
 int decompte( int dureeDecompte ) {
 	fd_set readfds;
@@ -25,14 +25,14 @@ int decompte( int dureeDecompte ) {
 	FD_ZERO( &readfds );
 	FD_SET( 0, &readfds );
 
-	//durée du décompte
+	//durÃ©e du dÃ©compte
 	Duree.tv_sec = dureeDecompte;
 	Duree.tv_usec = 0;
 
-	//surveille l'entrée standard (clavier) sur une durée max
+	//surveille l'entrÃ©e standard (clavier) sur une durÃ©e max
 	resultat = select( 1, &readfds, NULL, NULL, &Duree );
 	if( resultat == 1 )
-		return 1;	//l'utilisateur a appuyé sur une touche
+		return 1;	//l'utilisateur a appuyÃ© sur une touche
 
-	return 0; //aucune touche préssée durant le décompte
+	return 0; //aucune touche prÃ©ssÃ©e durant le dÃ©compte
 }
