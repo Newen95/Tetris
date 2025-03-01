@@ -3,7 +3,7 @@ Tetris
 
 Language: C
 
-## The project:
+## Le projet:
 L'objectif de ce projet est recréer le jeu Tetris jouable dans un terminal.
 Le jeu prend place sur une grille de jeu de 10 lignes et de 10 colonnes.
 Les pièces sont choisies au hasard.
@@ -16,9 +16,9 @@ Voici comment jouer à Tetris:
 * Puis choisissez le numéro de la colonne où placer la pièce
 * Chaque fois qu'une ligne est remplie elle disparaît et le score du joueur est incrémenté
 
-## USAGE:
+## Utilisation:
 
-### Prerequisites
+### Prérequis
 * gcc
 * make
 ```
@@ -26,4 +26,4 @@ make
 ./tetris.exe
 ```
 
-Author: [**Newen Calle**](https://github.com/Newen95)
+Auteur: [**Newen Calle**](https://github.com/Newen95)
